@@ -21,7 +21,7 @@ public class UserService {
         return userList;
     }
 
-    public void deleteUser(Long id) {
+    public void deleteUser(long id) {
         if(!userRepositiory.existsById(id))
             throw new IllegalStateException("User by id "+id+" does not exist");
         userRepositiory.deleteById(id);
@@ -36,7 +36,7 @@ public class UserService {
         userRepositiory.save(user);
     }
     @Transactional
-    public void changeUserName(Long id, String userPhNo) {
+    public void changeUserName(long id, String userPhNo) {
         User user =userRepositiory.findById(id).orElseThrow(
                 ()-> new IllegalStateException(
                         "User with user id: "+id +" doe not exist"
@@ -46,12 +46,16 @@ public class UserService {
             user.setPhNo(userPhNo);
     }
 
-    public User getUser(Long userId) {
+    public User getUser(long userId) {
         List<User> userList= userRepositiory.findAll();
         for(User user : userList){
-            if(user.getId().equals(userId))
+            if(user.getId().longValue()==userId)
                 return user;
         }
         return null;
+    }
+
+    public void deleteAll() {
+        userRepositiory.deleteAll();
     }
 }
