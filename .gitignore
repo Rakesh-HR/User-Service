@@ -15,3 +15,4 @@ UserService/.mvn/wrapper/maven-wrapper.properties
 UserService/.mvn/wrapper/maven-wrapper.jar
 UserService/mvnw
 UserService/mvnw.cmd
+*.jar
