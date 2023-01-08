@@ -16,3 +16,8 @@ UserService/.mvn/wrapper/maven-wrapper.jar
 UserService/mvnw
 UserService/mvnw.cmd
 *.jar
+.DS_Store
+UserService/.DS_Store
+UserService/.mvn/wrapper/maven-wrapper.jar
+UserService/src/.DS_Store
+UserService/src/main/.DS_Store
