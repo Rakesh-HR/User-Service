@@ -1,21 +1,25 @@
 package com.UserManagement.UserService.User;
 
+import com.UserManagement.UserService.S3BucketStorageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 @EnableScheduling
 @RestController
 @RequestMapping(path = "api/v1/user-management")
 public class UserController {
-    
+    @Autowired
+    S3BucketStorageService s3BucketStorageService;
 
    private final Logger LOG = LoggerFactory.getLogger(UserController.class);
 
@@ -65,5 +69,23 @@ public class UserController {
     @CacheEvict(value = "users", allEntries=true)
     public void evictAllcachesAtIntervals() {
             LOG.info("Cache cleared");
+    }
+
+    @GetMapping("/list/files")
+    public ResponseEntity<List<String>> getListOfFiles() {
+        return new ResponseEntity<>(s3BucketStorageService.listFiles(), HttpStatus.OK);
+    }
+
+    @PostMapping("/file/upload")
+    public ResponseEntity<String> uploadFile(@RequestParam("fileName") String fileName,
+                                             @RequestParam("file") MultipartFile file) {
+        LOG.info("Uploading file",fileName);
+        return new ResponseEntity<>(s3BucketStorageService.uploadFile(fileName, file), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/file/delete/{fileName}")
+    public ResponseEntity<String> deleteFile(@PathVariable("fileName") String fileName){
+        LOG.info("Deleting file",fileName);
+        return new ResponseEntity<>(s3BucketStorageService.deleteFile(fileName),HttpStatus.OK);
     }
 }
